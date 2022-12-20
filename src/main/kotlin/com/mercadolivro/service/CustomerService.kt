@@ -6,7 +6,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class CustomerService(
-    val repository: CustomerRepository
+    val repository: CustomerRepository,
+    val bookService: BookService
 ) {
 
     fun create(customer: CustomerModel) {
@@ -20,7 +21,7 @@ class CustomerService(
         return repository.findAll().toList()
     }
 
-    fun getById(id: Int): CustomerModel {
+    fun findById(id: Int): CustomerModel {
         return repository.findById(id).orElseThrow()
     }
 
@@ -32,9 +33,8 @@ class CustomerService(
     }
 
     fun delete(id: Int) {
-        if (!repository.existsById(id)) {
-            throw Exception()
-        }
+        val customer = findById(id)
+        bookService.deleteByCustomer(customer)
         repository.deleteById(id)
     }
 }
