@@ -5,6 +5,7 @@ import com.mercadolivro.controller.request.PostCustomerRequest
 import com.mercadolivro.controller.request.PutBookRequest
 import com.mercadolivro.controller.request.PutCustomerRequest
 import com.mercadolivro.enums.BookStatus
+import com.mercadolivro.enums.CustomerStatus
 import com.mercadolivro.model.BookModel
 import com.mercadolivro.model.CustomerModel
 import java.math.BigDecimal
@@ -12,15 +13,17 @@ import java.math.BigDecimal
 fun PostCustomerRequest.toCustomerModel(): CustomerModel {
     return CustomerModel(
         name = this.name,
-        email = this.email
+        email = this.email,
+        status = CustomerStatus.ATIVO
     )
 }
 
-fun PutCustomerRequest.toCustomerModel(id: Int): CustomerModel {
+fun PutCustomerRequest.toCustomerModel(customer: CustomerModel): CustomerModel {
     return CustomerModel(
-        id = id,
+        id = customer.id,
         name = this.name,
-        email = this.email
+        email = this.email,
+        status = customer.status
     )
 }
 
