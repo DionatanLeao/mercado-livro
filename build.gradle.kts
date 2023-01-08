@@ -25,6 +25,7 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.flywaydb:flyway-core:9.8.1")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
