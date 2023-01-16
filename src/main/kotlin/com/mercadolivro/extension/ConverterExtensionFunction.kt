@@ -10,13 +10,13 @@ import com.mercadolivro.enums.BookStatus
 import com.mercadolivro.enums.CustomerStatus
 import com.mercadolivro.model.BookModel
 import com.mercadolivro.model.CustomerModel
-import java.math.BigDecimal
 
 fun PostCustomerRequest.toCustomerModel(): CustomerModel {
     return CustomerModel(
         name = this.name,
         email = this.email,
-        status = CustomerStatus.ATIVO
+        status = CustomerStatus.ATIVO,
+        password = this.password
     )
 }
 
@@ -25,7 +25,8 @@ fun PutCustomerRequest.toCustomerModel(customer: CustomerModel): CustomerModel {
         id = customer.id,
         name = this.name,
         email = this.email,
-        status = customer.status
+        status = customer.status,
+        password = customer.password
     )
 }
 
