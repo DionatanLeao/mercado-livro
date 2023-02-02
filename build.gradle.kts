@@ -32,6 +32,7 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-kotlin:1.6.14")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
