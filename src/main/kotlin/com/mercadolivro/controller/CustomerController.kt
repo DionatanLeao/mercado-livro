@@ -16,7 +16,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/customers")
 class CustomerController(
-    val service: CustomerService
+   private val service: CustomerService
 ) {
 
     @PostMapping
