@@ -34,7 +34,11 @@ class SecurityConfig(
     private val PUBLIC_MATCHERS = arrayOf<String>()
 
     private val PUBLIC_POST_MATCHERS = arrayOf(
-        "/customer"
+        "/customers"
+    )
+
+    private val PUBLIC_GET_MATCHERS = arrayOf(
+            "/books"
     )
 
     private val ADMIN_MATCHERS = arrayOf(
@@ -50,8 +54,8 @@ class SecurityConfig(
         http.authorizeRequests()
             .antMatchers(*PUBLIC_MATCHERS).permitAll()
             .antMatchers(HttpMethod.POST, *PUBLIC_POST_MATCHERS).permitAll()
-            .antMatchers(*ADMIN_MATCHERS).hasAuthority(Role.ADMIN.description)
-            .anyRequest().authenticated()
+            .antMatchers(HttpMethod.GET, *PUBLIC_GET_MATCHERS).permitAll()
+            .antMatchers(*ADMIN_MATCHERS).hasAuthority(Role.ADMIN.description).anyRequest().authenticated()
         http.addFilter(AuthenticationFilter(authenticationManager(), customerRepository, jwtUtil))
         http.addFilter(AuthorizationFilter(authenticationManager() ,userDetails, jwtUtil))
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
