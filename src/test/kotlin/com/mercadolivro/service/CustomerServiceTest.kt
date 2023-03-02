@@ -44,6 +44,16 @@ class CustomerServiceTest {
         verify(exactly = 0) { repository.findByNameContaining(any()) }
     }
 
+    @Test
+    fun `fake test`() {
+        val result = sum(2, 3)
+        assertEquals(5,result)
+    }
+
+    private fun sum(a: Int, b: Int): Int {
+        return a + b
+    }
+
     private fun buildCustomer(
             id: Int? = null,
             name: String = "customer name",
