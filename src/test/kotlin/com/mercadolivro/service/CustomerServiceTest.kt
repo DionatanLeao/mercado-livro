@@ -37,21 +37,27 @@ class CustomerServiceTest {
     @Test
     fun `should return all customers`() {
         val fakeCustomers = listOf(buildCustomer(), buildCustomer())
+
         every { repository.findAll() } returns fakeCustomers
+
         val customers = customerService.getAll(null)
+
         assertEquals(fakeCustomers, customers)
         verify(exactly = 1) { repository.findAll() }
         verify(exactly = 0) { repository.findByNameContaining(any()) }
     }
 
     @Test
-    fun `fake test`() {
-        val result = sum(2, 3)
-        assertEquals(5,result)
-    }
+    fun `should return all customers when name is informed`() {
+        val name = UUID.randomUUID().toString()
+        val fakeCustomers = listOf(buildCustomer(), buildCustomer())
 
-    private fun sum(a: Int, b: Int): Int {
-        return a + b
+        every { repository.findByNameContaining(name) } returns fakeCustomers
+
+        val customers = customerService.getAll(name)
+        assertEquals(fakeCustomers, customers)
+        verify(exactly = 1) { repository.findByNameContaining(name) }
+        verify(exactly = 0) { repository.findAll() }
     }
 
     private fun buildCustomer(
