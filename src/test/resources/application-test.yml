@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: ${APP_PROFILE:test}
+    datasource:
+      url: jdbc:postgresql://localhost:5433/mercadolivrotest
+      username: postgres
+      password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+  jackson:
+    default-property-inclusion: non_null
+
+jwt:
+  secret: d226d405-0d4c-4de5-b078-5535f13e7952
+  expiration: 999999
