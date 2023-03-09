@@ -2,6 +2,7 @@ package com.mercadolivro.service
 
 import com.mercadolivro.enums.CustomerStatus
 import com.mercadolivro.enums.Role
+import com.mercadolivro.exception.NotFoundException
 import com.mercadolivro.model.CustomerModel
 import com.mercadolivro.repository.CustomerRepository
 import io.mockk.every
@@ -13,11 +14,13 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import java.util.UUID
+import java.util.*
+import kotlin.random.Random
 
 @ExtendWith(MockKExtension::class)
 class CustomerServiceTest {
@@ -58,6 +61,50 @@ class CustomerServiceTest {
         assertEquals(fakeCustomers, customers)
         verify(exactly = 1) { repository.findByNameContaining(name) }
         verify(exactly = 0) { repository.findAll() }
+    }
+
+    @Test
+    fun `should create customer and encrypt password`() {
+        val initialPassword = Math.random().toString()
+        val fakeCustomer = buildCustomer(password = initialPassword)
+        val fakePassword = UUID.randomUUID().toString()
+        val fakeCustomerEncrypted = fakeCustomer.copy(password = fakePassword)
+
+        every { repository.save(fakeCustomerEncrypted) } returns fakeCustomer
+        every { bCrypt.encode(initialPassword) } returns fakePassword
+
+        customerService.create(fakeCustomer)
+
+        verify(exactly = 1) { repository.save(any()) }
+        verify(exactly = 1) { bCrypt.encode(any()) }
+    }
+
+    @Test
+    fun `should return customer by id`() {
+        val id = Random.nextInt()
+        val fakeCustomer = buildCustomer(id = id)
+
+        every { repository.findById(id) } returns Optional.of(fakeCustomer)
+
+        val customer = customerService.findById(id)
+
+        assertEquals(fakeCustomer, customer)
+        verify(exactly = 1) { repository.findById(id) }
+    }
+
+    @Test
+    fun `should throw error when customer not found`() {
+        val id = Random.nextInt()
+
+        every { repository.findById(id) } returns Optional.empty()
+
+        val error = assertThrows<NotFoundException>{
+            customerService.findById(id)
+        }
+
+        assertEquals("Customer [${id}] not exists", error.message)
+        assertEquals("ML-101", error.errorCode)
+        verify(exactly = 1) { repository.findById(id) }
     }
 
     private fun buildCustomer(
